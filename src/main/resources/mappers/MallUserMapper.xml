@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.binobook.dao.MallUserMapper" >
+  <resultMap id="BaseResultMap" type="com.binobook.po.MallUser" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
+    <result column="true_name" property="trueName" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, user_password, true_name, email, phone, create_date, update_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from Users
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Users
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.binobook.po.MallUser" >
+    insert into Users (id, name, user_password,
+      true_name, email, phone, 
+      create_date, update_date
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR},
+      #{trueName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <!--
+        Add operation
+          By default, the number of affected rows is returned. You can set the return primary key (automatic growth)
+          Usegeneratedkeys: the value range is true or false, which indicates that the primary key will be obtained and assigned to the model property (property field in JavaBean entity class) set by the keyproperty property property
+          Keyproperty: sets which property field the return value will be assigned to the data property
+          Keycolumn: set the main key name of the database automatically
+          The returned primary key will be automatically set to the corresponding ID attribute field in the entity class
+  -->  <insert id="insertSelective" parameterType="com.binobook.po.MallUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+    insert into Users
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="userPassword != null" >
+        user_password,
+      </if>
+      <if test="trueName != null" >
+        true_name,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null" >
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="trueName != null" >
+        #{trueName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.binobook.po.MallUser" >
+    update Users
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null" >
+        user_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="trueName != null" >
+        true_name = #{trueName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.binobook.po.MallUser" >
+    update Users
+    set name = #{name,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      true_name = #{trueName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="queryUserByName" parameterType="string" resultType="com.binobook.po.MallUser">
+    select
+        <include refid="Base_Column_List"/>
+    from
+        Users
+    where
+        name = #{name}
+  </select>
+
+  <!-- Query Order Details -->
+  <select id="queryOrderDetailByID" parameterType="java.lang.Integer" resultType="java.util.Map">
+    SELECT
+	    *
+    from
+         orderitems
+     where
+      order.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByParams" parameterType="com.binobook.query.MallUserQuery" resultType="com.binobook.po.MallUser">
+    select
+        <include refid="Base_Column_List"></include>
+    from
+        Users
+    <where>
+      <if test="null != name and name != ''">
+        and name like concat('%',#{name},'%')
+      </if>
+      <if test="null != email and email != ''">
+        and email like concat('%',#{email},'%')
+      </if>
+      <if test="null != phone and phone != ''">
+        and phone like concat('%',#{phone},'%')
+      </if>
+    </where>
+  </select>
+
+
+  <update id="deleteBatch">
+    delete from
+        Users
+    where
+        id
+    in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+          #{id}
+        </foreach>
+  </update>
+
+
+  <select id="queryMallUserOrderlistsByID" parameterType="java.lang.Integer" resultType="java.util.Map">
+    SELECT
+      *
+    from
+      Users
+        left join
+      orders
+      on
+        Users.id = orders.customer_id
+    where
+        Users.id = #{id,jdbcType=INTEGER}
+  </select>
+
+</mapper>

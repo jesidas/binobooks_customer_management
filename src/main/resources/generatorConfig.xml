@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration [
+        <!ELEMENT generatorConfiguration (classPathEntry|context)*>
+        <!ELEMENT classPathEntry (#PCDATA)>
+        <!ATTLIST classPathEntry
+                location CDATA #REQUIRED>
+        <!ELEMENT context (commentGenerator|jdbcConnection|javaTypeResolver|javaModelGenerator|sqlMapGenerator|javaClientGenerator|table)*>
+        <!ATTLIST context
+                id CDATA #REQUIRED
+                targetRuntime CDATA #REQUIRED>
+        <!ELEMENT commentGenerator (property)*>
+        <!ELEMENT property (#PCDATA)>
+        <!ATTLIST property
+                name CDATA #REQUIRED
+                value CDATA #REQUIRED>
+        <!ELEMENT jdbcConnection (#PCDATA)>
+        <!ATTLIST jdbcConnection
+                driverClass CDATA #REQUIRED
+                connectionURL CDATA #REQUIRED
+                userId CDATA #REQUIRED
+                password CDATA #REQUIRED>
+        <!ELEMENT javaTypeResolver (property)*>
+        <!ELEMENT javaModelGenerator (property)*>
+        <!ATTLIST javaModelGenerator
+                targetPackage CDATA #REQUIRED
+                targetProject CDATA #REQUIRED>
+        <!ELEMENT sqlMapGenerator (property)*>
+        <!ATTLIST sqlMapGenerator
+                targetPackage CDATA #REQUIRED
+                targetProject CDATA #REQUIRED>
+        <!ELEMENT javaClientGenerator (property)*>
+        <!ATTLIST javaClientGenerator
+                type CDATA #REQUIRED
+                targetPackage CDATA #REQUIRED
+                targetProject CDATA #REQUIRED>
+        <!ELEMENT table (#PCDATA)>
+        <!ATTLIST table
+                tableName CDATA #REQUIRED
+                domainObjectName CDATA #REQUIRED
+                enableCountByExample CDATA #REQUIRED
+                enableUpdateByExample CDATA #REQUIRED
+                enableDeleteByExample CDATA #REQUIRED
+                enableSelectByExample CDATA #REQUIRED
+                selectByExampleQueryId CDATA #REQUIRED>
+        ]>
+<generatorConfiguration>
+
+    <!--
+        数据库驱动
+            在左侧project边栏的External Libraries中找到mysql的驱动，右键选择copy path
+    -->
+    <classPathEntry  location="/Users/ls/Documents/Java/Maven/m2/repository/mysql/mysql-connector-java/8.0.18/mysql-connector-java-8.0.18.jar"/>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <commentGenerator>
+            <!-- 是否去除日期那行注释 -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库链接地址账号密码 -->
+        <jdbcConnection
+                driverClass="com.mysql.cj.jdbc.Driver"
+                connectionURL="jdbc:mysql://127.0.0.1:3306/binobooks?serverTimezone=GMT%2B8"
+                userId="root"
+                password="">
+        </jdbcConnection>
+
+        <!--
+             java类型处理器
+                用于处理DB中的类型到Java中的类型，默认使用JavaTypeResolverDefaultImpl；
+                注意一点，默认会先尝试使用Integer，Long，Short等来对应DECIMAL和NUMERIC数据类型；
+                true：使用 BigDecimal对应DECIMAL和NUMERIC数据类型
+                false：默认，把JDBC DECIMAL和NUMERIC类型解析为Integer
+        -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+
+
+        <!-- 生成Model类存放位置 -->
+        <javaModelGenerator targetPackage="com.binobook.po" targetProject="src/main/java">
+            <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
+            <property name="enableSubPackages" value="true"/>
+            <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+
+        <!--生成映射文件存放位置-->
+        <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+
+        <!--生成Dao类存放位置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.binobook.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+
+        <table tableName="orders" domainObjectName="Orders"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+    </context>
+</generatorConfiguration>
+

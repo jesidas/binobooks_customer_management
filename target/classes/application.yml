@@ -1,0 +1,44 @@
+server:
+  # Port
+  port: 8989
+  # context-path
+  servlet:
+    context-path: /bnb
+## database
+spring:
+  datasource:
+    type: com.mchange.v2.c3p0.ComboPooledDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://159.75.20.131:3306/binobook_Repository?serverTimezone=GMT%2B8
+    #url: jdbc:mysql://127.0.0.1:3306/binobooks?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: root
+    password: binobooks
+  ## freemarker
+  freemarker:
+    suffix: .ftl
+    content-type: text/html
+    charset: UTF-8
+    template-loader-path: classpath:/views/
+  #
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: bnb/main/java
+
+## mybatis configuration
+mybatis:
+  mapper-locations: classpath:/mappers/*.xml
+  type-aliases-package: com.binobook.springboot.po
+  configuration:
+    ## camel-case
+    map-underscore-to-camel-case: true
+## pageHelper
+pagehelper:
+  helper-dialect: mysql
+# Display dao Implement sql
+logging:
+  level:
+    com:
+      shsxt:
+        springboot:
+          dao: debug
